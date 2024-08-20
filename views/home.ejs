@@ -1,0 +1,11 @@
+<h1>Welcome to User Tracking App</h1>
+<% if (user) { %>
+	<p>Hello, <%= user.username %>!</p>
+	<a href="/users">View Users</a>
+	<a href="/sites">View Sites</a>
+	<a href="/logout">Logout</a>
+<% } else { %>
+	<p>Please log in or register to continue.</p>
+	<a href="/login">Login</a>
+	<a href="/register">Register</a>
+<% } %>

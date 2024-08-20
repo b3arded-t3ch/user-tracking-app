@@ -1,0 +1,51 @@
+<h1>User Detail</h1>
+<div>
+    <p><strong>Username:</strong> <%= user.username %></p>
+    <p><strong>First Name:</strong> <%= user.firstName %></p>
+    <p><strong>Last Name:</strong> <%= user.lastName %></p>
+    <p><strong>Organization:</strong> <%= user.organization %></p>
+    <p><strong>Country:</strong> <%= user.country %></p>
+    <p><strong>Permission Level:</strong> <%= user.permissionLevel %></p>
+    <p><strong>Registration Date:</strong> <%= user.registrationDate.toDateString() %></p>
+    <p><strong>Last Login Date:</strong> <%= user.lastLoginDate ? user.lastLoginDate.toDateString() : 'N/A' %></p>
+</div>
+<h2>Last 10 Sites Viewed</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Site Name</th>
+            <th>Country</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+     <% recentViews.forEach(activity => { %>
+      <tr>
+        <td><%= activity.siteId.name %></td>
+        <td><%= activity.siteId.country %></td>
+        <td><%= activity.date.toDateString() %></td>
+      </tr>
+    <% }) %>
+    </tbody>
+</table>
+<h2>Last 10 Sites Edited</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Site Name</th>
+            <th>Country</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+     <% recentEdits.forEach(activity => { %>
+      <tr>
+        <td><%= activity.siteId.name %></td>
+        <td><%= activity.siteId.country %></td>
+        <td><%= activity.date.toDateString() %></td>
+      </tr>
+    <% }) %>
+   </tbody>
+</table>
+<a href="/users">Back to User List</a>
+<a href="/logout">Logout</a>

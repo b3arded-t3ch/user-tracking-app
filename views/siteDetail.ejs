@@ -1,0 +1,7 @@
+<h1><%= site.name %></h1>
+<p><strong>Country:</strong> <%= site.country %></p>
+<p><strong>Description:</strong> <%= site.description %></p>
+<p><strong>Created:</strong> <%= site.createdAt.toDateString() %></p>
+<p><strong>Last Updated:</strong> <%= site.updatedAt.toDateString() %></p>
+<a href="/sites/<%= site._id %>/edit">Edit Site</a>
+<a href="/sites">Back to Site List</a>

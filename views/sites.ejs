@@ -1,0 +1,22 @@
+<h1>Site List</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Country</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% sites.forEach(site => { %>
+      <tr>
+        <td><%= site.name %></td>
+        <td><%= site.country %></td>
+        <td>
+          <a href="/sites/<%= site._id %>">View</a>
+          <a href="/sites/<%= site._id %>/edit">Edit</a>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
