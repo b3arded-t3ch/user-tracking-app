@@ -1,4 +1,5 @@
 const express = require('express');
+const ActivityLog = require('../models/activityLog');
 const User = require('../models/user');
 const router = express.Router();
 
@@ -37,6 +38,31 @@ router.get('users/:id', isAuthenticated, async (req, res) => {
 		res.render('userDetail', { title: 'User Detail', user, recentViews, recentEdits });
 	} catch (error) {
 		res.status(500).send('Error fetching user details');
+	}
+});
+
+router.get('/dashboard', isAuthenticated, async (req, res) => {
+	try {
+		const user = await User.findById(req.user.id).select('-password');
+		const recentViews = await ActivityLog.find({ userId: user.id, action: 'view' })
+			.sort('-date')
+			.limit(10)
+			.populate('siteId');
+		const recentEdits = await ActivityLog.find({ userId: user.id, action: 'edit' })
+			.sort('-date')
+			.limit(10)
+			.populate('siteId');
+
+		res.render('dashboard', {
+			title: 'Dashboard',
+			user,
+			recentViews,
+			recentEdits,
+			body: null
+		});
+	} catch (error) {
+		console.error('Error fetching dashboard data:', error);
+		res.status(500).send('Error fetching dashboard data');
 	}
 });
 

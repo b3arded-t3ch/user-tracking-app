@@ -42,30 +42,6 @@ router.post('/login', (req, res, next) => {
 	})(req, res, next);
 });
 
-//router.get('/login', (req, res) => {
-//	res.render('login', { title: 'Login' });
-//});
-
-//router.post('/login', (req, res, next) => {
-//	passport.authenticate('local', (err, user, info) => {
-//		if (err) {
-//			console.error('Login error:', err);
-//			return next(err);
-//		}
-//		if (!user) {
-//			req.flash('error', info.message || 'Login failed');
-//			return res.redirect('/login');
-//		}
-//		req.logIn(user, (err) => {
-//			if (err) {
-//				console.error('Login error:', err);
-//				return next(err);
-//			}
-//			return res.redirect('/dashboard');
-//		});
-//	})(req, res, next);
-//});
-
 router.get('/logout', (req, res, next) => {
 	req.logout((err) => {
 		if (err) { return next(err); }
