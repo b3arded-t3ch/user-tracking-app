@@ -1,56 +1,58 @@
-<%- include('layout') %>
+<%- include('layout', { title: 'Dashboard' }) %>
 
-<div class="container">
-  <h1>Dashboard</h1>
+<h1>Dashboard</h1>
 
-  <div class="user-info">
-    <p><strong>Username:</strong> <%= user.username %></p>
-    <p><strong>First Name:</strong> <%= user.firstName %></p>
-    <p><strong>Last Name:</strong> <%= user.lastName %></p>
-    <p><strong>Organization:</strong> <%= user.organization %></p>
-    <p><strong>Country:</strong> <%= user.country %></p>
-    <p><strong>Permission Level:</strong> <%= user.permissionLevel %></p>
-    <p><strong>Registration Date:</strong> <%= user.registrationDate.toDateString() %></p>
-    <p><strong>Last Login Date:</strong> <%= user.lastLoginDate ? user.lastLoginDate.toDateString() : 'N/A' %></p>
-  </div>
+<section>
+	<h2>User List</h2>
+	<table>
+		<thead>
+			<tr>
+				<th><a href="?sort=username&order=<%= currentSort === 'username' && currentOrder === 1 ? 'desc' : 'asc' %>">Username</a></th>
+				<th><a href="?sort=firstName&order=<%= currentSort === 'firstName' && currentOrder === 1 ? 'desc' : 'asc' %>">First Name</a></th>
+				<th><a href="?sort=lastName&order=<%= currentSort === 'lastName' && currentOrder === 1 ? 'desc' : 'asc' %>">Last Name</a></th>
+				<th><a href="?sort=organization&order=<%= currentSort === 'organization' && currentOrder === 1 ? 'desc' : 'asc' %>">Organization</a></th>
+				<th><a href="?sort=country&order=<%= currentSort === 'country' && currentOrder === 1 ? 'desc' : 'asc' %>">Country</a></th>
+				<th><a href="?sort=permissionLevel&order=<%= currentSort === 'permissionLevel' && currentOrder === 1 ? 'desc' : 'asc' %>">Permission Level</a></th>
+				<th><a href="?sort=registrationDate&order=<%= currentSort === 'registrationDate' && currentOrder === 1 ? 'desc' : 'asc' %>">Registration Date</a></th>
+				<th><a href="?sort=lastLoginDate&order=<%= currentSort === 'lastLoginDate' && currentOrder === 1 ? 'desc' : 'asc' %>">Last Login Date</a></th>
+			</tr>
+		</thead>
+		<tbody>
+			<% users.forEach(user => { %>
+			<tr>
+				<td><a href="/users/<%= user._id %>"><%= user.username %></a></td>
+				<td><%= user.firstName %></td>
+				<td><%= user.lastName %></td>
+				<td><%= user.organization %></td>
+				<td><%= user.country %></td>
+				<td><%= user.permissionLevel %></td>
+				<td><%= user.registrationDate.toLocaleDateString() %></td>
+				<td><%= user.lastLoginDate ? user.lastLoginDate.toLocaleDateString() : 'N/A' %></td>
+			</tr>
+			<% }) %>
+		</tbody>
+	</table>
+</section>
 
-  <h2>Last 10 Sites Viewed</h2>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Site Name</th>
-        <th>Country</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% recentViews.forEach(activity => { %>
-      <tr>
-        <td><%= activity.siteId.name %></td>
-        <td><%= activity.siteId.country %></td>
-        <td><%= activity.date.toDateString() %></td>
-      </tr>
-      <% }) %>
-    </tbody>
-  </table>
+<section>
+	<h2>Quick Stats</h2>
+	<p>Total Users: <%= stats.totalUsers %></p>
+	<p>Total Sites: <%= stats.totalSites %></p>
+	<h3>Recent Activity</h3>
+	<ul>
+		<% stats.recentActivity.forEach(activity => { %>
+			<li><%= activity.userId.username %> <%= activity.action %>ed <%= activity.siteId.name %> on <%= activity.date.toLocaleString() %></li><% }) %>
+	</ul>
+</section>
 
-  <h2>Last 10 Sites Edited</h2>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Site Name</th>
-        <th>Country</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% recentEdits.forEach(activity => { %>
-      <tr>
-        <td><%= activity.siteId.name %></td>
-        <td><%= activity.siteId.country %></td>
-        <td><%= activity.date.toDateString() %></td>
-      </tr>
-      <% }) %>
-    </tbody>
-  </table>
-</div>
+<nav>
+	<a href="/sites">Manage Sites</a>
+</nav>
+
+<style>
+	table { width: 100%; border-collapse: collapse; }
+	th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+	th { background-color: #f2f2f2; }
+	th a { text-decoration: none; color: #333; }
+	th a:hover { text-decoration: underline; }
+</style>

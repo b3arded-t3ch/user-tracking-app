@@ -1,51 +1,62 @@
-<h1>User Detail</h1>
-<div>
-    <p><strong>Username:</strong> <%= user.username %></p>
-    <p><strong>First Name:</strong> <%= user.firstName %></p>
-    <p><strong>Last Name:</strong> <%= user.lastName %></p>
-    <p><strong>Organization:</strong> <%= user.organization %></p>
-    <p><strong>Country:</strong> <%= user.country %></p>
-    <p><strong>Permission Level:</strong> <%= user.permissionLevel %></p>
-    <p><strong>Registration Date:</strong> <%= user.registrationDate.toDateString() %></p>
-    <p><strong>Last Login Date:</strong> <%= user.lastLoginDate ? user.lastLoginDate.toDateString() : 'N/A' %></p>
-</div>
-<h2>Last 10 Sites Viewed</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Site Name</th>
-            <th>Country</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-     <% recentViews.forEach(activity => { %>
-      <tr>
-        <td><%= activity.siteId.name %></td>
-        <td><%= activity.siteId.country %></td>
-        <td><%= activity.date.toDateString() %></td>
-      </tr>
-    <% }) %>
-    </tbody>
-</table>
-<h2>Last 10 Sites Edited</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Site Name</th>
-            <th>Country</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-     <% recentEdits.forEach(activity => { %>
-      <tr>
-        <td><%= activity.siteId.name %></td>
-        <td><%= activity.siteId.country %></td>
-        <td><%= activity.date.toDateString() %></td>
-      </tr>
-    <% }) %>
-   </tbody>
-</table>
-<a href="/users">Back to User List</a>
-<a href="/logout">Logout</a>
+<%- include('layout', { title: 'User Detail' }) %>
+
+<h1>User Detail: <%= user.username %></h1>
+
+<section>
+	<h2>User Information</h2>
+	<p>Name: <%= user.firstName %> <%= user.lastName %></p>
+	<p>Organization: <%= user.organization %></p>
+	<p>Country: <%= user.country %></p>
+	<p>Registration Date: <%= user.registrationDate.toLocaleDateString() %></p>
+	<p>Last Login: <%= user.lastLoginDate ? user.lastLoginDate.toLocaleDateString() : 'N/A' %></p>
+</section>
+
+<section>
+	<h2>Recent Activity</h2>
+	<h3>Last 10 Sites Viewed</h3>
+	<table>
+		<thead>
+			<tr>
+				<th>Site Name</th>
+				<th>Country</th>
+				<th>View Date</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% recentViews.forEach(view => { %>
+			<tr>
+				<td><a href="/sites/<%= view.siteId._id %>"><%= view.siteId.name %></a></td>
+				<td><%= view.siteId.country %></td>
+				<td><%= view.date.toLocaleString() %></td>
+			</tr>
+			<% }) %>
+		</tbody>
+	</table>
+	<h3>Last 10 Sites Edited</h3>
+	<table>
+		<thead>
+			<tr>
+				<th>Site Name</th>
+				<th>Country</th>
+				<th>Edit Date</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% recentEdits.forEach(edit => { %>
+			<tr>
+				<td><a href="/sites/<%= edit.siteId._id %>"><%= edit.siteId.name %></a></td>
+				<td><%= edit.siteId.country %></td>
+				<td><%= edit.date.toLocaleString() %></td>
+			</tr>
+			<% }) %>
+		</tbody>
+	</table>
+</section>
+
+<a href="/dashboard">Back to Dashboard</a>
+
+<style>
+	table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+	th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+	th { background-color: #f2f2f2; }
+</style>

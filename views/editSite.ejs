@@ -1,7 +1,9 @@
+<%- include('layout', { title: 'Edit Site' }) %>
+
 <h1>Edit Site: <%= site.name %></h1>
 <form action="/sites/<%= site._id %>/edit" method="POST">
 	<div>
-		<label for="name">Name:</label>
+		<label for="name">Site Name:</label>
 		<input type="text" id="name" name="name" value="<%= site.name %>" required>
 	</div>
 	<div>
@@ -10,7 +12,7 @@
 	</div>
 	<div>
 		<label for="description">Description:</label>
-		<textarea id="description" name="description"><%= site.description %></textarea>
+		<textarea id="description" name="description" required><%= site.description %></textarea>
 	</div>
 	<button type="submit">Update Site</button>
 </form>

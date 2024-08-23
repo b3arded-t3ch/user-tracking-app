@@ -1,7 +1,18 @@
+<%- include('layout', { title: 'Site Detail' }) %>
+
 <h1><%= site.name %></h1>
-<p><strong>Country:</strong> <%= site.country %></p>
-<p><strong>Description:</strong> <%= site.description %></p>
-<p><strong>Created:</strong> <%= site.createdAt.toDateString() %></p>
-<p><strong>Last Updated:</strong> <%= site.updatedAt.toDateString() %></p>
+<p>Country: <%= site.country %></p>
+<p>Description: <%= site.description %></p>
+<p>Last Updated: <%= site.lastUpdated.toLocaleDateString() %></p>
+
+<h2>Recent Activity</h2>
+<ul>
+    <% site.recentActivity.forEach(activity => { %>
+        <li>
+            <%= activity.user.username %> <%= activity.action %> on <%= activity.date.toLocaleDateString() %>
+        </li>
+    <% }) %>
+</ul>
+
 <a href="/sites/<%= site._id %>/edit">Edit Site</a>
-<a href="/sites">Back to Site List</a>
+<a href="/sites">Back to Sites List</a>

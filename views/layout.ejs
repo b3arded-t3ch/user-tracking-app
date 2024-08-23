@@ -1,21 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><%= title %></title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - User Tracking App</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<header>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <% if (locals.user) { %>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                <% } else { %>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Register</a></li>
+                <% } %>
+            </ul>
+        </nav>
+    </header>
 
-</header>
-<main>
-<%- body %>
-</main>
-<footer>
+    <main>
 
-</footer>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 User Tracking App</p>
+    </footer>
+
+    <script src="/js/main.js"></script>
 </body>
 </html>
-

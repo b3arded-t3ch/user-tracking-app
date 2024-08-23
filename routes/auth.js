@@ -6,7 +6,11 @@ const router = express.Router();
 
 
 router.get('/register', (req, res) => {
-	res.render('register', { title: 'Register' });
+	res.render('register', {
+		title: 'Register',
+		user: req.user || null,
+		error: req.flash('error') || null
+	});
 });
 
 router.post('/register', async (req, res) => {
@@ -31,7 +35,11 @@ router.post('/register', async (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-	res.render('login', { title: 'Login' });
+	res.render('login', {
+		title: 'Login',
+		user: req.user || null,
+		error: req.flash('error')
+	});
 });
 
 router.post('/login', (req, res, next) => {

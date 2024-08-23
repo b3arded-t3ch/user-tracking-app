@@ -17,7 +17,7 @@ const port = process.env.PORT || 3000;
 require('./config/passport')(passport);
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/user_tracking_app', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/user_tracking_app', {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
 });
