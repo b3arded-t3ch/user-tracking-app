@@ -7,6 +7,7 @@ const engine = require('ejs-mate');
 const flash = require('connect-flash');
 
 const authRoutes = require('./routes/auth');
+const { updateLastLogin } = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const siteRoutes = require('./routes/sites');
 
@@ -20,6 +21,17 @@ require('./config/passport')(passport);
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/user_tracking_app', {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
+}).then(() => {
+	console.log('Connected to MongoDB');
+	return mongoose.connection.db.listCollections({name: 'users'}).toArray();
+}).then((collections) => {
+	if (collections.length === 0) {
+		return mongoose.model('User').createCollection();
+	}
+}).then(() => {
+	return mongoose.model('User').syncIndexes();
+}).catch((err) => {
+	console.error('Error setting up database:', err);
 });
 
 // View engine setup
@@ -38,6 +50,9 @@ app.use(session({
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Update last login middleware
+app.use(updateLastLogin);
 
 // Flash setup
 app.use(flash());

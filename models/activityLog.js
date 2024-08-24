@@ -7,4 +7,11 @@ const activityLogSchema = new mongoose.Schema({
 	date: { type: Date, default: Date.now }
 });
 
+const getLastSitesForUser = async (userId, action, limit = 10) => {
+	return ActivityLog.find({ userId, action })
+		.sort({ timestamp: -1 })
+		.limit(limit)
+		.populate('siteId');
+};
+
 module.exports = mongoose.model('ActivityLog', activityLogSchema);

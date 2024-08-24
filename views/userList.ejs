@@ -1,5 +1,9 @@
 <%- include('layout', { title: 'User List' }) %>
 
+<form action="/users" method="GET">
+    <input type="text" name="search" placeholder="Search users...">
+    <button type="submit">Search</button>
+</form>
 <h1>User List</h1>
     <table id="userTable">
         <thead>

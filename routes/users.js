@@ -12,23 +12,64 @@ function isAuthenticated(req, res, next) {
 	return redirect('/login');
 }
 
-router.get('/users', isAuthenticated, async (req, res) => {
+router.get('/users', isAuthenticated, async (req, res, next) => {
 	try {
-		const sortField = req.query.sort || 'username';
-		const sortOrder = req.query.order === 'desc' ? -1 : 1;
-		const users = await User.find()
-			.select('-password')
-			.sort({ [sortField]: sortOrder });
-		res.render('users', { title: 'User List',
+		const { search, sort, order, page = 1 } = req.query;
+		const limit = 10;
+		const skip = (page - 1) * limit;
+
+		let query = {};
+		if (search) {
+			query = { $or: [
+				{ username: new RegExp(search, 'i') },
+				{ firstName: new RegExp(search, 'i') },
+				{ lastName: new RegExp(search, 'i') }
+			]};
+		}
+
+		let sortOption = {};
+		if (sort && order) {
+			sortOption[sort] = order === 'asc' ? 1 : -1;
+		}
+
+		const users = await User.find(query)
+			.sort(sortOption)
+			.skip(skip)
+			.limit(limit);
+
+		const total = await User.countDocuments(query);
+		const pages = Math.ceil(total / limit);
+
+		res.render('users', {
+			title: 'Users',
+			users,
 			user: req.user,
-			users, 
-			currentSort: sortField,
-			currentOrder: sortOrder });
+			search,
+			currentPage: page,
+			pages
+		});
 	} catch (error) {
-		console.error('Error fetching users:', error);
 		next(error);
 	}
 });
+
+//router.get('/users', isAuthenticated, async (req, res) => {
+//	try {
+//		const sortField = req.query.sort || 'username';
+//		const sortOrder = req.query.order === 'desc' ? -1 : 1;
+//		const users = await User.find()
+//			.select('-password')
+//			.sort({ [sortField]: sortOrder });
+//		res.render('users', { title: 'User List',
+//			user: req.user,
+//			users, 
+//			currentSort: sortField,
+//			currentOrder: sortOrder });
+//	} catch (error) {
+//		console.error('Error fetching users:', error);
+//		next(error);
+//	}
+//});
 
 router.get('/users/:id', isAuthenticated, async (req, res) => {
 	try {

@@ -43,10 +43,22 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', (req, res, next) => {
-	passport.authenticate('local', {
-		successRedirect: '/dashboard',
-		failureRedirect: '/login',
-		failureFlash: true
+	passport.authenticate('local', (err, user, info) => {
+		if (err) { return next(err); }
+		if (!user) {
+			req.flash('error', 'Invalid username or password.');
+			return res.redirect('/login');
+		}
+		req.logIn(user, async (err) => {
+			if (err) { return next(err); }
+			try {
+				await updateLastLogin(req, res, () => {});
+				return res.redirect('/dashboard');
+			} catch (error) {
+				console.error('Error during login:', error);
+				return next(error);
+			}
+		});
 	})(req, res, next);
 });
 
@@ -57,5 +69,22 @@ router.get('/logout', (req, res, next) => {
 	});
 });
 
+const updateLastLogin = async (req, res, next) => {
+	if (req.user) {
+		try {
+			const updatedUser = await User.findByIdAndUpdate(
+				req.user._id, 
+				{ lastLoginDate: new Date() },
+				{ new: true }
+			);
+			console.log('Updated user:', updatedUser);
+		} catch (error) {
+			console.error('Error updating last login:', error);
+		}
+	}
+	next();
+};
+
 module.exports = router;
+module.exports.updateLastLogin = updateLastLogin;
 
